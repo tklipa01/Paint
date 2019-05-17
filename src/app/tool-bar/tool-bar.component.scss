@@ -1,7 +1,7 @@
 .tool-bar {
     display: grid;
     grid-template-columns: 50px 50px;  
-    grid-auto-rows: 50px;
+    grid-auto-rows: auto;
 }
 
 .col-2 {
@@ -14,6 +14,7 @@
 
 .range {
     -webkit-appearance: slider-vertical;
+    min-height: 100px;
 }
 
 .button {
@@ -22,6 +23,7 @@
     border: none;
     background-color: #222;
     color: white;
+    height: 50px;
 }
 
 .button:hover:not(.button-active) {
@@ -30,4 +32,24 @@
 
 .button-active {
     background-color: #555;
+}
+
+
+
+.hr-sect {    
+    display: flex;
+    font-size: .85rem;
+	flex-basis: 100%;
+	align-items: center;
+	color: rgba(255,255,255, .5);    
+}
+.hr-sect::before,
+.hr-sect::after {
+	content: "";
+	flex-grow: 1;
+	background: rgba(255,255,255, .5);
+	height: 1px;
+	font-size: 0px;
+	line-height: 0px;
+	margin: 0px 8px;
 }

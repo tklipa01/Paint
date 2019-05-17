@@ -11,7 +11,7 @@ export class AppComponent {
   
     private actionLocalStorageKey = 'actionKey';
 
-    action: Action = new Action('free', new Brush(10, 'round', '#000000'));
+    action: Action = new Action('free', new Brush(10, 'round', '#000000'));    
 
     ngOnInit() {
       let localStorageAction = localStorage.getItem(this.actionLocalStorageKey);

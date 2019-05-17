@@ -2,6 +2,8 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { Brush } from '../models/brush';
 import { Action } from '../models/action';
 import { ActionService } from '../services/action.service';
+import { Theme } from '../models/theme';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-tool-bar',
@@ -10,18 +12,27 @@ import { ActionService } from '../services/action.service';
 })
 export class ToolBarComponent {
 
-    @Input() action: Action;
+    @Input() action: Action;        
     @Output() actionChangedEvent = new EventEmitter<Action>();
 
-    constructor(private actionService: ActionService) {
-      this.actionService.undo$.subscribe(() => {
-        console.log('undo');
-      });
+    private theme: Theme;
 
+    themeEnum = Theme;
+
+    constructor(private actionService: ActionService, private themeService: ThemeService) {
+    }
+
+    ngOnInit(): void {
+      this.theme = this.themeService.theme;      
+    }
+
+    triggerThemeChange(theme: Theme) {
+      this.theme = theme;
+      this.themeService.theme = this.theme;
     }
 
     triggerActionChangedEvent() {
-      this.actionChangedEvent.next(this.action);      
+      this.actionChangedEvent.emit(this.action);      
     }
 
     triggerUndo() {

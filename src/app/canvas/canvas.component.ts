@@ -14,6 +14,8 @@ import { Point } from 'src/app/models/point';
 import { Action } from '../models/action';
 import { RecursiveTemplateAstVisitor } from '@angular/compiler';
 import { ActionService } from '../services/action.service';
+import { Theme } from '../models/theme';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-canvas',
@@ -32,16 +34,20 @@ export class CanvasComponent implements AfterViewInit, OnChanges {
     private tempContext: CanvasRenderingContext2D;
     private tempCanvas: HTMLCanvasElement;
 
+    private theme: Theme = Theme.Dark;
+
     freeSubscription: Subscription;    
     lineSubscription: Subscription;
+    viewPortChangeSubscription: Subscription;
 
     undoSubscription: Subscription;
     clearSubscription: Subscription;
+    themeSubscription: Subscription;
 
     @ViewChild('canvasEl') canvasEl: ElementRef;
     @ViewChild('tempCanvasEl') tempCanvasEl: ElementRef;
 
-    constructor(private actionService: ActionService) {
+    constructor(private actionService: ActionService, private themeService: ThemeService) {
       
     }
 
@@ -52,7 +58,14 @@ export class CanvasComponent implements AfterViewInit, OnChanges {
 
       this.clearSubscription = this.actionService.clear$.subscribe(() => {
         this.clearCanvas(this.context, true);
-      });
+      });      
+
+      this.viewPortChangeSubscription = fromEvent(window, 'resize').subscribe((event: any) => {
+        this.width = event.target.innerWidth;
+        this.height = event.target.innerHeight;
+        this.setCanvasDimensions(this.width, this.height);
+        this.repaintCanvasFromActions(this.actionService.get());        
+      })
     }
 
     ngAfterViewInit() {
@@ -64,11 +77,13 @@ export class CanvasComponent implements AfterViewInit, OnChanges {
         }
         this.context = this.canvas.getContext('2d');
         this.tempContext = this.tempCanvas.getContext('2d');
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
-        this.tempCanvas.width = this.width;
-        this.tempCanvas.height = this.height;
-        this.context.fillStyle='white';
+        this.setCanvasDimensions(this.width, this.height);
+
+        this.themeSubscription = this.themeService.themeChange$.subscribe((theme: Theme) => {
+          this.theme = theme;
+          this.context.fillStyle = this.theme;
+          this.repaintCanvasFromActions(this.actionService.get());   
+        });             
 
         this.setContextFromAction(this.action);
         this.context.fillRect(0,0,this.canvas.width,this.canvas.height);
@@ -80,21 +95,30 @@ export class CanvasComponent implements AfterViewInit, OnChanges {
         }
     }
 
+    setCanvasDimensions(width: number, height: number) {
+      this.canvas.width = width;
+      this.canvas.height = height; 
+      this.tempCanvas.width = width;
+      this.tempCanvas.height = height;
+    }
+
     setContextFromAction(action: Action, initEvents: boolean = true) {
-        if(!this.context) return;
+        if(!this.context) return;        
         this.context.lineWidth = action.brush.lineWidth;
         this.context.lineCap = action.brush.lineCap;
         this.context.strokeStyle = action.brush.strokeStyle;
         this.tempContext.lineWidth = action.brush.lineWidth;
         this.tempContext.lineCap = action.brush.lineCap;
         this.tempContext.strokeStyle = action.brush.strokeStyle;
-        switch(action.mode) {
-          case 'free':            
-            this.captureFreeEvents(this.tempCanvas);
-            break;
-          case 'line': 
-            this.captureLineEvents(this.tempCanvas);
-            break;
+        if(initEvents){
+          switch(action.mode) {
+            case 'free':            
+              this.captureFreeEvents(this.tempCanvas);
+              break;
+            case 'line': 
+              this.captureLineEvents(this.tempCanvas);
+              break;
+          }
         }
     }
 
@@ -207,6 +231,7 @@ export class CanvasComponent implements AfterViewInit, OnChanges {
       if(!context) return;
         context.clearRect(0, 0, this.width, this.height);
       if(refill) {
+        this.context.fillStyle = this.theme;
         context.fillRect(0,0,this.canvas.width,this.canvas.height);
       }
     }

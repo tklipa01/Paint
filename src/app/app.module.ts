@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { CanvasComponent } from 'src/app/canvas/canvas.component';
 import { ToolBarComponent } from './tool-bar/tool-bar.component';
 import { ActionService } from './services/action.service';
+import { ThemeService } from './services/theme.service';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,7 @@ import { ActionService } from './services/action.service';
     BrowserModule,
     FormsModule
   ],
-  providers: [ActionService],
+  providers: [ActionService, ThemeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
