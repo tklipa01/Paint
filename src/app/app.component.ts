@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Brush } from './models/brush';
+import { Action } from './models/action';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,18 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Paint';
+  
+    private actionLocalStorageKey = 'actionKey';
+
+    action: Action = new Action('free', new Brush(10, 'round', '#000000'));
+
+    ngOnInit() {
+      let localStorageAction = localStorage.getItem(this.actionLocalStorageKey);
+      if(localStorageAction) this.action = JSON.parse(localStorageAction);
+    }
+
+    handleActionChangedEvent(action: Action) {
+        this.action = {...action};
+        localStorage.setItem(this.actionLocalStorageKey, JSON.stringify(this.action));
+    }
 }

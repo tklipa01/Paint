@@ -1,0 +1,14 @@
+<div class="tool-bar">
+    <input class="button col-2" type="color" [(ngModel)]="action.brush.strokeStyle" (change)="triggerActionChangedEvent()">
+    <input class="button row-2 col-2 range" type="range" min="0" max="100" orient="vertical" [(ngModel)]="action.brush.lineWidth" (change)="triggerActionChangedEvent()">
+
+    <button class="button col-2" [ngClass]="{'button-active': action.mode === 'free'}" (click)="action.mode = 'free'; triggerActionChangedEvent()">Free</button>
+    <button class="button col-2" [ngClass]="{'button-active': action.mode === 'line'}" (click)="action.mode = 'line'; triggerActionChangedEvent()">Line</button>
+    
+    <!-- <button class="button" (click)="action.brush.lineCap = 'butt'; triggerActionChangedEvent()">Butt</button> -->
+    <button class="button" [ngClass]="{'button-active': action.brush.lineCap === 'round'}" (click)="action.brush.lineCap = 'round'; triggerActionChangedEvent()"><i class="fas fa-circle"></i></button>
+    <button class="button" [ngClass]="{'button-active': action.brush.lineCap === 'square'}" (click)="action.brush.lineCap = 'square'; triggerActionChangedEvent()"><i class="fas fa-square-full"></i></button>
+
+    <button class="button" (click)="triggerUndo()">Undo</button>
+    <button class="button" (click)="triggerClear()">Clear</button>
+</div>
