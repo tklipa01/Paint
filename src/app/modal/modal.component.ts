@@ -17,6 +17,7 @@ export class ModalComponent {
     rooms: Room[];
     createRoom: Room;
     createRoomLightTheme: boolean = false; 
+    selectedRoom: Room;
 
     constructor(private roomService: RoomService, private router: Router) { 
         

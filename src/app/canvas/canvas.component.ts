@@ -27,7 +27,7 @@ export class CanvasComponent implements AfterViewInit, OnChanges {
     @Input() width: number;
     @Input() height: number;
     @Input() action: Action;
-    @Input() theme: Theme = Theme.Dark;
+    theme: Theme = Theme.Dark;
 
     private context: CanvasRenderingContext2D;
     private canvas: HTMLCanvasElement;
