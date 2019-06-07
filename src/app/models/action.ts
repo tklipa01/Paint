@@ -4,6 +4,7 @@ import { Point } from './point';
 export type Mode = 'free' | 'line'; 
 
 export class Action {
+    timestamp: number;
     mode: Mode;
     brush: Brush;
     points: Point[];

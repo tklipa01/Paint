@@ -1,0 +1,32 @@
+<div id="myModal" class="modal">
+
+        <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Welcome to PaintWithFriends!</h2>
+        </div>
+        <div class="modal-body">
+            <div class="option">
+                <h3>Join room</h3>
+                <br>
+                <select [(ngModel)]="selectedRoom" (ngModelChange)="navigateToRoom($event)">
+                    <option *ngFor="let room of rooms" [ngValue]="room.name">{{room.name}}</option>
+                </select>
+            </div>
+            <div class="option">
+                <h3>Create room</h3>
+                <br>                
+                <input [(ngModel)]="createRoom.name" placeholder="Room Name" required>
+                <br>
+                Light Theme
+                <input type="checkbox" [(ngModel)]="createRoomLightTheme">
+                <br>
+                Private Room <span class="muted">(only those with the url will be able to access)</span>
+                <input type="checkbox" [(ngModel)]="createRoom.priv">
+                <br>
+                <br>
+                <button (click)="createRoomAndNavigate()">Create</button>
+            </div>
+        </div>
+    </div>
+</div>

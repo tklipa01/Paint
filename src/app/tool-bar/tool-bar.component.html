@@ -1,14 +1,14 @@
 <div class="tool-bar">
-    <div class="col-2 hr-sect margin-top-sm">
+    <!-- <div class="col-2 hr-sect margin-top-sm">
         Canvas
     </div>
 
     <button class="button" [ngClass]="{'button-active': theme === themeEnum.Light}"  (click)="triggerThemeChange(themeEnum.Light)">Light</button>
-    <button class="button" [ngClass]="{'button-active': theme === themeEnum.Dark}" (click)="triggerThemeChange(themeEnum.Dark)">Dark</button>
+    <button class="button" [ngClass]="{'button-active': theme === themeEnum.Dark}" (click)="triggerThemeChange(themeEnum.Dark)">Dark</button> -->
 
-    <div class="col-2 hr-sect margin-top-lg">
+    <!-- <div class="col-2 hr-sect">
         Brush
-    </div>
+    </div> -->
 
     <input class="button col-2" type="color" [(ngModel)]="action.brush.strokeStyle" (change)="triggerActionChangedEvent()">
     <input class="button row-2 col-2 range" type="range" min="0" max="100" orient="vertical" [(ngModel)]="action.brush.lineWidth" (change)="triggerActionChangedEvent()">
@@ -20,9 +20,9 @@
     <button class="button" [ngClass]="{'button-active': action.brush.lineCap === 'round'}" (click)="action.brush.lineCap = 'round'; triggerActionChangedEvent()"><i class="fas fa-circle"></i></button>
     <button class="button" [ngClass]="{'button-active': action.brush.lineCap === 'square'}" (click)="action.brush.lineCap = 'square'; triggerActionChangedEvent()"><i class="fas fa-square-full"></i></button>
 
-    <div class="col-2 hr-sect margin-top-lg">
+    <!-- <div class="col-2 hr-sect">
         Utils
-    </div>
+    </div> -->
 
     <button class="button" (click)="triggerUndo()">Undo</button>
     <button class="button" (click)="triggerClear()">Clear</button>

@@ -4,6 +4,7 @@ import { Action } from '../models/action';
 import { ActionService } from '../services/action.service';
 import { Theme } from '../models/theme';
 import { ThemeService } from '../services/theme.service';
+import { RoomService } from '../services/room.service';
 
 @Component({
   selector: 'app-tool-bar',
@@ -15,7 +16,7 @@ export class ToolBarComponent {
     @Input() action: Action;        
     @Output() actionChangedEvent = new EventEmitter<Action>();
 
-    private theme: Theme;
+    theme: Theme;
 
     themeEnum = Theme;
 
@@ -42,5 +43,4 @@ export class ToolBarComponent {
     triggerClear() {
       this.actionService.clearAll();
     }
-
 }

@@ -27,14 +27,13 @@ export class CanvasComponent implements AfterViewInit, OnChanges {
     @Input() width: number;
     @Input() height: number;
     @Input() action: Action;
+    @Input() theme: Theme = Theme.Dark;
 
     private context: CanvasRenderingContext2D;
     private canvas: HTMLCanvasElement;
 
     private tempContext: CanvasRenderingContext2D;
-    private tempCanvas: HTMLCanvasElement;
-
-    private theme: Theme = Theme.Dark;
+    private tempCanvas: HTMLCanvasElement;    
 
     freeSubscription: Subscription;    
     lineSubscription: Subscription;
@@ -43,6 +42,7 @@ export class CanvasComponent implements AfterViewInit, OnChanges {
     undoSubscription: Subscription;
     clearSubscription: Subscription;
     themeSubscription: Subscription;
+    actionsSubscription: Subscription;
 
     @ViewChild('canvasEl') canvasEl: ElementRef;
     @ViewChild('tempCanvasEl') tempCanvasEl: ElementRef;
@@ -64,8 +64,14 @@ export class CanvasComponent implements AfterViewInit, OnChanges {
         this.width = event.target.innerWidth;
         this.height = event.target.innerHeight;
         this.setCanvasDimensions(this.width, this.height);
-        this.repaintCanvasFromActions(this.actionService.get());        
-      })
+        this.repaintCanvasFromActions(this.actionService.get());
+      });
+
+      this.actionsSubscription = this.actionService.actionReady$.subscribe(() => {
+        this.actionsSubscription.add(this.actionService.actions$.subscribe((actions: Action[]) => {
+          this.repaintCanvasFromActions(actions);
+        }));
+      });
     }
 
     ngAfterViewInit() {
@@ -240,6 +246,7 @@ export class CanvasComponent implements AfterViewInit, OnChanges {
       this.clearCanvas(this.context, true);
       for(let a of actions) {
         this.setContextFromAction(a, false);
+        a.points = Object.keys(a.points).map((key) => a.points[key]) as Point[];
         switch(a.mode){
           case 'free':
             // if just a single point was free drawn
